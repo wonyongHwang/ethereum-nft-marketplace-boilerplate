@@ -158,6 +158,8 @@ function NFTTokenIds({ inputValue, setInputValue }) {
   }
 
   const getMarketItem = (nft) => {
+    console.log("nft: ",nft)
+    console.log("fmt: ",fetchMarketItems)
     const result = fetchMarketItems?.find(
       (e) =>
         e.nftContract === nft?.token_address &&

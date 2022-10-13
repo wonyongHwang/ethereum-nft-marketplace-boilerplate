@@ -9,7 +9,7 @@ export const networkCollections = {
     },
     {
       image:
-        "https://ipfs.moralis.io:2053/ipfs/QmfLbpeVHxReWKNLaXTPcWiafi49eoAL4gRwMGuXtx2Eqe/images/14.png",
+        "https://gateway.ipfs.io/ipfs/QmTx46YJNoYbkqhzbgzQ2Y6vQi4NSy1cPLuB1D6jvf4avE",
       name: "Pixel Show",
       addrs: "0xCA34404dD8Bd6537BE76F3A51B379F8949bD7973",
     },
@@ -64,6 +64,46 @@ export const networkCollections = {
       name: "Cool Cats NFT",
       addrs: "0x1A92f7381B9F03921564a437210bB9396471050C",
     },
+  ],
+  "0x4": [
+    {
+      image:
+        "https://testnets.opensea.io/static/images/categories/art.png",
+      name: "SLIMESHOP",
+      addrs: "0x60ee992dd2fa9b6fc35e7895c3322370d052963e",
+    },
+    {
+      image:
+        "https://i.seadn.io/gcs/files/2cb7616ab92450beb4981a16028b0aa3.png?auto=format&w=384",
+      name: "Phi Quest Object",
+      addrs: "0x2f33b8870f86b319258380377076147a59e29135",
+    },
+    {
+      image:
+        "https://i.seadn.io/gcs/files/2cb7616ab92450beb4981a16028b0aa3.png?auto=format&w=384",
+      name: "KOPO",
+      addrs: "0xf6A584969FE2A9cC7fdDBDf5611C1d1f81ce9297",
+    },
+  ],
+    "0x5" : [
+      {
+        image:
+          "https://testnets.opensea.io/static/images/categories/art.png",
+        name: "SLIMESHOP",
+        addrs: "0x60ee992dd2fa9b6fc35e7895c3322370d052963e",
+      },
+      {
+        image:
+          "https://i.seadn.io/gcs/files/2cb7616ab92450beb4981a16028b0aa3.png?auto=format&w=384",
+        name: "Phi Quest Object",
+        addrs: "0x2f33b8870f86b319258380377076147a59e29135",
+      },
+      {
+        image:
+          "https://i.seadn.io/gcs/files/2cb7616ab92450beb4981a16028b0aa3.png?auto=format&w=384",
+        name: "KOPO",
+        addrs: "0xCd4Ef2AB77EdDfEC93b9b2C7A382e0eE618d0B43",
+      },
   ],
 };
 

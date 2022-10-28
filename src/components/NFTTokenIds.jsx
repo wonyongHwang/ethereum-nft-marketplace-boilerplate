@@ -12,6 +12,7 @@ import {
   FileSearchOutlined,
   RightCircleOutlined,
   ShoppingCartOutlined,
+  UndoOutlined, // hwy added
 } from "@ant-design/icons";
 import { useMoralisDapp } from "providers/MoralisDappProvider/MoralisDappProvider";
 import { getExplorer } from "helpers/networks";
@@ -61,6 +62,9 @@ function NFTTokenIds({ inputValue, setInputValue }) {
   const { NFTTokenIds, totalNFTs, fetchSuccess } = useNFTTokenIds(inputValue);
   const [visible, setVisibility] = useState(false);
   const [nftToBuy, setNftToBuy] = useState(null);
+  const [nftToCancel, setNftToCancel] = useState(null); // hwy added
+  const [visibleCancel, setVisibilityCancel] = useState(false); // hwy added
+
   const [loading, setLoading] = useState(false);
   const contractProcessor = useWeb3ExecuteFunction();
   const { chainId, marketAddress, contractABI, walletAddress } =
@@ -84,8 +88,9 @@ function NFTTokenIds({ inputValue, setInputValue }) {
     ])
   );
   const purchaseItemFunction = "createMarketSale";
+  const cancelListingItemFunction = "revokeMarketItem"; // hwy added
   const NFTCollections = getCollectionsByChain(chainId);
-
+  
   async function purchase() {
     setLoading(true);
     const tokenDetails = getMarketItem(nftToBuy);
@@ -111,9 +116,38 @@ function NFTTokenIds({ inputValue, setInputValue }) {
         updateSoldMarketItem();
         succPurchase();
       },
-      onError: (error) => {
+      onError: () => {
         setLoading(false);
         failPurchase();
+      },
+    });
+  }
+
+  async function cancelListing() { // hwy added
+    setLoading(true);
+    const tokenDetails = getMarketItem(nftToCancel);
+    const itemID = tokenDetails.itemId;
+    const ops = {
+      contractAddress: marketAddress,
+      functionName: cancelListingItemFunction,
+      abi: contractABIJson,
+      params: {
+        itemId: itemID,
+      },
+    };
+    await contractProcessor.fetch({
+      params: ops,
+      onSuccess: () => {
+        console.log("success");
+        // setLoading(false);
+        setVisibilityCancel(false);
+        updateSoldMarketItem();
+        succCancelListing();
+      },
+      onError: (error) => {
+        // setLoading(false);
+        setVisibilityCancel(false);
+        failCancelListing(error);
       },
     });
   }
@@ -124,11 +158,30 @@ function NFTTokenIds({ inputValue, setInputValue }) {
     setVisibility(true);
   };
 
+  // hwy added
+  const handleCancelListingClick = (nft) => {
+    setNftToCancel(nft)
+    console.log(nft);
+    setVisibilityCancel(true);
+    // cancelListing(nft);
+  };
+
   function succPurchase() {
     let secondsToGo = 5;
     const modal = Modal.success({
       title: "Success!",
       content: `You have purchased this NFT`,
+    });
+    setTimeout(() => {
+      modal.destroy();
+    }, secondsToGo * 1000);
+  }
+
+  function succCancelListing() { // hwy added
+    let secondsToGo = 5;
+    const modal = Modal.success({
+      title: "Success!",
+      content: `You have Canceled this NFT`,
     });
     setTimeout(() => {
       modal.destroy();
@@ -145,6 +198,18 @@ function NFTTokenIds({ inputValue, setInputValue }) {
       modal.destroy();
     }, secondsToGo * 1000);
   }
+
+  function failCancelListing(e) { // hwy added
+    let secondsToGo = 5;
+    const modal = Modal.error({
+      title: "Error!",
+      content: e.message,
+    });
+    setTimeout(() => {
+      modal.destroy();
+    }, secondsToGo * 1000);
+  }
+
 
   async function updateSoldMarketItem() {
     const id = getMarketItem(nftToBuy).objectId;
@@ -265,6 +330,12 @@ function NFTTokenIds({ inputValue, setInputValue }) {
                   <Tooltip title="Buy NFT">
                     <ShoppingCartOutlined onClick={() => handleBuyClick(nft)} />
                   </Tooltip>,
+                  // hwy added
+                  <Tooltip title="Cancel Listing">
+           
+                    <UndoOutlined onClick={() => handleCancelListingClick(nft)} />
+                  
+                  </Tooltip>,
                 ]}
                 style={{ width: 240, border: "2px solid #e7eaf3" }}
                 cover={
@@ -285,6 +356,22 @@ function NFTTokenIds({ inputValue, setInputValue }) {
               </Card>
             ))}
         </div>
+        {nftToCancel && (   // hwy added
+            <Modal
+              title='Cancel Listing'
+              visible={visibleCancel}
+              bodyStyle={{
+                padding: "15px",
+                fontSize: "17px",
+                fontWeight: "500",
+              }}
+              onCancel={() => setVisibilityCancel(false)}
+              onOk={() => cancelListing()}
+            >
+              Do you really want to cancel listing?
+            </Modal> 
+          )
+        }
         {getMarketItem(nftToBuy) ? (
           <Modal
             title={`Buy ${nftToBuy?.name} #${nftToBuy?.token_id}`}

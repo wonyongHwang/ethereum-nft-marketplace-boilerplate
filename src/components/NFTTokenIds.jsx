@@ -124,7 +124,6 @@ function NFTTokenIds({ inputValue, setInputValue }) {
   }
 
   async function cancelListing() { // hwy added
-    setLoading(true);
     const tokenDetails = getMarketItem(nftToCancel);
     const itemID = tokenDetails.itemId;
     const ops = {
@@ -139,13 +138,11 @@ function NFTTokenIds({ inputValue, setInputValue }) {
       params: ops,
       onSuccess: () => {
         console.log("success");
-        // setLoading(false);
         setVisibilityCancel(false);
         updateSoldMarketItem();
         succCancelListing();
       },
       onError: (error) => {
-        // setLoading(false);
         setVisibilityCancel(false);
         failCancelListing(error);
       },
